@@ -14,7 +14,7 @@ https://utkarshydv27.github.io/smarttech-guide/
 - **Local Safety Check:** A browser-based phrase-pattern checklist for common suspicious-message warning signs. It is not a definitive scam detector, antivirus, or link scanner. Message text is not transmitted by this feature.
 - **Knowledge Search:** Searches a curated index of guides and official resources in the browser. It does not use a server or send the query to a search provider.
 - **Guides:** Practical explainers on suspicious messages, fake job offers, government services, viral-claim verification, AI tools, image compression and image formats.
-- **Official resource directory:** Links to DigiLocker, myScheme, National Career Service, the National Cyber Crime Reporting Portal, PIB Fact Check and RBI.
+- **Official resource directory:** Links to DigiLocker, myScheme, National Career Service, National Scholarship Portal, SWAYAM, the National Cyber Crime Reporting Portal, PIB Fact Check and RBI.
 - **Optional image utilities:** Image compressor, image resizer, format converter and images-to-PDF tool remain available as a secondary part of the website.
 
 ## Pages
