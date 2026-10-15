@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#2563eb">
+<meta name="description" content="Use SmartTech Guide's free browser-based image compressor, image resizer, image format converter and image-to-PDF tool.">
+<title>Free Online Image & PDF Tools | SmartTech Guide</title><link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css"><script defer src="assets/app.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head><body><a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="container nav-wrap"><a class="brand" href="index.html"><span class="brand-mark">S<span>+</span></span><span>SmartTech<span class="brand-light">Guide</span></span></a><button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="siteNav" aria-label="Open navigation"><span></span><span></span><span></span></button><nav class="site-nav" id="siteNav" aria-label="Main navigation"><a href="index.html">Home</a><a class="active" href="tools.html">All Tools</a><a href="ai-tools.html">AI Tools</a><a href="guides.html">Guides</a><a href="about.html">About</a></nav><a class="button button-small button-primary nav-cta" href="#compressor">Start with an image <span>↗</span></a></div></header>
+<main id="main">
+<section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="index.html">Home</a> / All Tools</div><span class="eyebrow eyebrow-blue">FREE ONLINE TOOLKIT</span><h1>Useful tools, <span class="text-blue">right in your browser.</span></h1><p>Compress, resize and convert images, or create a PDF from your pictures. No account is required for these tools.</p></div></section>
+<section class="content-section"><div class="container">
+<div class="inline-note"><strong>Privacy note:</strong> Image tools process selected files locally in your browser. Your selected image is not uploaded to SmartTech Guide. The Image to PDF feature loads a third-party PDF library from a CDN.</div>
+<div class="tool-page-grid">
+<section class="interactive-tool" id="compressor"><span class="eyebrow eyebrow-blue">TOOL 01 · IMAGE</span><h2>Image Compressor</h2><p>Reduce file size by adjusting the output quality. JPEG and WebP are usually best for photographs.</p>
+<label class="tool-label" for="compressFile">Choose an image</label><input class="file-input" id="compressFile" type="file" accept="image/*">
+<div class="preview-wrap" id="compressPreview"></div>
+<div class="tool-controls"><label><span class="tool-label">Output format</span><select class="field" id="compressFormat"><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option><option value="image/png">PNG (quality slider not used)</option></select></label><label><span class="tool-label">Quality</span><div class="range-row"><span>Smaller file</span><b id="compressQualityValue">78%</b><span>Higher quality</span></div><input class="field" style="padding:8px 4px" id="compressQuality" type="range" min="10" max="100" value="78" aria-label="Compression quality"></label></div>
+<button class="button button-primary" id="compressButton" type="button" style="margin-top:17px">Compress image <span>→</span></button><div class="tool-status" id="compressStatus" role="status" aria-live="polite">Choose an image to get started.</div><a class="button button-outline download-link" id="compressDownload">Download image</a><p class="small-note">Note: PNG is lossless, so the quality slider does not change its output quality.</p>
+</section>
+<section class="interactive-tool" id="resizer"><span class="eyebrow eyebrow-blue">TOOL 02 · IMAGE</span><h2>Image Resizer</h2><p>Choose precise dimensions for profile photos, forms, websites or documents.</p>
+<label class="tool-label" for="resizeFile">Choose an image</label><input class="file-input" id="resizeFile" type="file" accept="image/*">
+<div class="tool-controls"><label><span class="tool-label">Width (px)</span><input class="field" id="resizeWidth" type="number" min="1" max="12000" placeholder="e.g. 1200"></label><label><span class="tool-label">Height (px)</span><input class="field" id="resizeHeight" type="number" min="1" max="12000" placeholder="e.g. 800"></label></div>
+<label class="tool-label" style="display:flex;align-items:center;gap:9px;font-weight:600"><input type="checkbox" id="resizeKeep" checked> Keep original aspect ratio</label>
+<label class="tool-label" for="resizeFormat">Output format</label><select class="field" id="resizeFormat"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select>
+<button class="button button-primary" id="resizeButton" type="button" style="margin-top:17px">Resize image <span>→</span></button><div class="tool-status" id="resizeStatus" role="status" aria-live="polite">Choose an image to see its original dimensions.</div><a class="button button-outline download-link" id="resizeDownload">Download image</a><p class="small-note">Maximum output is limited to 50 million pixels to help avoid browser memory issues.</p>
+</section>
+<section class="interactive-tool" id="converter"><span class="eyebrow eyebrow-blue">TOOL 03 · IMAGE</span><h2>Image Converter</h2><p>Convert a supported image into a different common web format.</p>
+<label class="tool-label" for="convertFile">Choose an image</label><input class="file-input" id="convertFile" type="file" accept="image/*">
+<label class="tool-label" for="convertFormat">Convert to</label><select class="field" id="convertFormat"><option value="image/webp">WebP</option><option value="image/jpeg">JPG</option><option value="image/png">PNG</option></select>
+<button class="button button-primary" id="convertButton" type="button" style="margin-top:17px">Convert image <span>→</span></button><div class="tool-status" id="convertStatus" role="status" aria-live="polite">Choose an image to get started.</div><a class="button button-outline download-link" id="convertDownload">Download converted image</a><p class="small-note">Converting a transparent image to JPG adds a white background. Exported files may differ in size from the original.</p>
+</section>
+<section class="interactive-tool" id="pdf"><span class="eyebrow eyebrow-blue">TOOL 04 · DOCUMENT</span><h2>Images to PDF</h2><p>Choose multiple images to create one PDF, with each image on its own A4 page.</p>
+<label class="tool-label" for="pdfFiles">Choose one or more images</label><input class="file-input" id="pdfFiles" type="file" accept="image/*" multiple>
+<div class="preview-wrap" id="pdfPreview"></div>
+<button class="button button-primary" id="pdfButton" type="button" style="margin-top:17px">Create PDF <span>→</span></button><div class="tool-status" id="pdfStatus" role="status" aria-live="polite">Select images to get started.</div><a class="button button-outline download-link" id="pdfDownload">Download PDF</a><p class="small-note">The PDF library loads from cdnjs. Keep the page open while your PDF is being created. Very large images can use significant memory.</p>
+</section>
+</div>
+<div class="section-heading" style="margin-top:56px"><span class="eyebrow eyebrow-blue">NEED A WALKTHROUGH?</span><h2>Follow a step-by-step guide.</h2><p>Learn about quality settings, image formats and choosing AI tools.</p><a class="button button-outline" href="guides.html">Browse guides <span>→</span></a></div>
+</div></section>
+</main>
+<footer class="site-footer"><div class="container"><div class="footer-main"><div class="footer-brand"><a class="brand brand-footer" href="index.html"><span class="brand-mark">S<span>+</span></span><span>SmartTech<span class="brand-light">Guide</span></span></a><p>Useful tools and clear guides for everyday technology.</p></div><div class="footer-links"><div><b>Explore</b><a href="tools.html">All Tools</a><a href="ai-tools.html">AI Tools</a><a href="guides.html">Guides</a></div><div><b>Information</b><a href="about.html">About</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy Policy</a><a href="disclaimer.html">Disclaimer</a></div></div></div><div class="footer-bottom"><span>© <span data-current-year>2026</span> SmartTech Guide. All rights reserved.</span><span>Made for useful, everyday tech.</span></div></div></footer>
+</body></html>
