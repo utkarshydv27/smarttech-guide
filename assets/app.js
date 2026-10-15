@@ -208,4 +208,129 @@
   }
 
   document.querySelectorAll("[data-current-year]").forEach(el => el.textContent = new Date().getFullYear());
+
+  // Local knowledge search: no query is transmitted to a server.
+  const knowledgeItems = [
+    {title:"Spot a suspicious message",description:"Common scam signs, suspicious links, credential requests and what to do next.",url:"guide-digital-safety.html",keywords:"scam fraud suspicious message otp pin password fake sms phishing cyber safety digital security bank parcel kyc"},
+    {title:"Check a suspicious message",description:"Run a simple on-device checklist for common warning signs.",url:"safety-check.html",keywords:"checker scam check message text link suspicious job offer"},
+    {title:"Avoid fake job offers",description:"Verify employers, avoid upfront fees and find official career resources.",url:"guide-job-scams.html",keywords:"career jobs recruiter interview resume work from home fake job fee employment ncs"},
+    {title:"Find official government services",description:"Start with DigiLocker, myScheme, NCS and the National Cyber Crime Portal.",url:"guide-government-services.html",keywords:"government scheme digilocker document portal aadhaar form certificate scholarship service ncs myscheme"},
+    {title:"Verify a viral claim",description:"Check the original source, date, context and supporting evidence.",url:"guide-check-claims.html",keywords:"fake news viral post forwarded message claim pib fact check misinformation news image"},
+    {title:"Choose an AI tool",description:"Compare usefulness, free-plan limits, privacy and accuracy.",url:"guide-ai-tools.html",keywords:"ai artificial intelligence prompt privacy free tool writing coding study"},
+    {title:"JPG, PNG or WebP",description:"Understand image formats and choose one for your task.",url:"guide-image-formats.html",keywords:"jpg png webp image photo format convert"},
+    {title:"Compress an image",description:"Learn quality settings and compare the size and clarity of results.",url:"guide-image-compression.html",keywords:"image compression reduce size photo"},
+    {title:"Government scheme finder",description:"Use the official myScheme portal to discover relevant schemes.",url:"https://www.myscheme.gov.in/",external:true,keywords:"scheme benefits eligibility government grant"},
+    {title:"Digital documents",description:"Use the official DigiLocker document wallet.",url:"https://www.digitallocker.gov.in/",external:true,keywords:"digilocker digital document certificate marksheet"},
+    {title:"Jobs and career support",description:"Visit India's National Career Service portal.",url:"https://www.ncs.gov.in/",external:true,keywords:"career job internship ncs employment"},
+    {title:"Report cybercrime",description:"Open India's official National Cyber Crime Reporting Portal.",url:"https://cybercrime.gov.in/",external:true,keywords:"report fraud cybercrime online payment 1930"},
+    {title:"Government claim fact-check",description:"Open PIB Fact Check for suspicious government-related claims.",url:"https://factcheck.pib.gov.in/",external:true,keywords:"pib fact check government announcement viral"},
+    {title:"All topics",description:"Browse Digital Safety, AI, Careers, Government Services, Money and Everyday Know-how.",url:"learn.html",keywords:"learn topic guide money payment financial basics"},
+    {title:"Online tools",description:"Use image compression, resizing, conversion and image-to-PDF utilities.",url:"tools.html",keywords:"compress resize image pdf tool converter"}
+  ];
+  const searchForm = byId("siteSearchForm"), searchInput = byId("siteSearch"), searchResults = byId("siteSearchResults");
+  if (searchForm && searchInput && searchResults) {
+    const showSearchResults = () => {
+      const query = searchInput.value.trim().toLowerCase();
+      searchResults.replaceChildren();
+      searchResults.hidden = false;
+      if (!query) {
+        const p = document.createElement("p");
+        p.className = "search-empty";
+        p.textContent = "Type a question or topic to search the guide library.";
+        searchResults.appendChild(p);
+        return;
+      }
+      const words = query.split(/\s+/).filter(Boolean);
+      const found = knowledgeItems.map(item => {
+        const corpus = (item.title + " " + item.description + " " + item.keywords).toLowerCase();
+        const score = words.reduce((n, word) => n + (corpus.includes(word) ? 1 : 0), 0);
+        return { ...item, score };
+      }).filter(item => item.score > 0).sort((a,b)=>b.score-a.score).slice(0,6);
+      if (!found.length) {
+        const p = document.createElement("p");
+        p.className = "search-empty";
+        p.textContent = "No close match found. Try a shorter phrase such as “job scam”, “DigiLocker” or “AI privacy”.";
+        searchResults.appendChild(p);
+        return;
+      }
+      const head = document.createElement("div");
+      head.className = "search-result-heading";
+      head.textContent = "Helpful starting points";
+      searchResults.appendChild(head);
+      found.forEach(item => {
+        const a = document.createElement("a");
+        a.className = "search-result";
+        a.href = item.url;
+        if (item.external) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+        const body = document.createElement("span");
+        const title = document.createElement("b"); title.textContent = item.title;
+        const desc = document.createElement("small"); desc.textContent = item.description;
+        body.append(title, desc);
+        const arrow = document.createElement("span"); arrow.className = "search-result-arrow"; arrow.textContent = item.external ? "↗" : "→";
+        a.append(body, arrow);
+        searchResults.appendChild(a);
+      });
+    };
+    searchForm.addEventListener("submit", e => { e.preventDefault(); showSearchResults(); });
+    searchInput.addEventListener("keydown", e => { if (e.key === "Escape") { searchResults.hidden = true; } });
+  }
+
+  // Simple, local phrase-pattern checklist — not a definitive scam detector.
+  const messageInput = byId("messageToCheck"), checkButton = byId("checkMessageButton"), clearButton = byId("clearMessageButton"), checkResult = byId("messageCheckResult");
+  if (messageInput && checkButton && checkResult) {
+    const patterns = [
+      {title:"Requests for passwords, OTPs or PINs",explain:"Never disclose an OTP, password, card PIN, CVV or UPI PIN to a caller or unverified site.",test: t => /\b(?:otp|one[- ]time password|upi pin|card pin|cvv|password|verification code)\b/i.test(t) && /\b(?:share|send|tell|provide|enter|confirm|verify|reply|give|update|submit)\b/i.test(t)},
+      {title:"Urgency, threats or account-blocking language",explain:"Pause and verify unexpected threats or deadlines through a contact channel you find independently.",test: t => /\b(?:urgent|immediately|act now|final warning|last chance|within\s*\d+\s*(?:minute|hour|day)s?|account.{0,25}(?:block|suspend|freeze)|(?:block|suspend|freeze).{0,25}account|expire(?:s|d)? today|legal action|digital arrest)\b/i.test(t)},
+      {title:"Links or shortened URLs",explain:"Do not open an unexpected link. Navigate to the organisation's known official website yourself.",test: t => /(?:https?:\/\/|www\.|\b(?:bit\.ly|tinyurl\.com|t\.me|wa\.me|cutt\.ly)\b)/i.test(t)},
+      {title:"Upfront job fees or unrealistic earnings",explain:"Verify the employer independently. Treat money demanded to secure a job or guaranteed high earnings as a serious warning sign.",test: t => /\b(?:registration fee|processing fee|security deposit|pay.{0,20}(?:job|interview|training|to start)|(?:job|interview).{0,20}fee|guaranteed job|guaranteed income|earn\s*(?:₹|rs\.?|inr)?\s*\d+|work from home.{0,35}fee|captcha.{0,35}job)\b/i.test(t)},
+      {title:"Prize, lottery or guaranteed-return claims",explain:"Unexpected prizes and promises of high or risk-free returns should be verified; do not pay to unlock a supposed reward.",test: t => /\b(?:you(?:'ve| have) won|claim.{0,20}(?:prize|reward|gift|cash)|lottery|lucky winner|guaranteed returns?|double your money|risk[- ]free profit|free gift)\b/i.test(t)},
+      {title:"Remote access or screen-sharing request",explain:"Do not install remote-access software or share your screen at the request of an unknown caller.",test: t => /\b(?:anydesk|teamviewer|quick.?support|remote access|screen.?share|share your screen)\b/i.test(t)},
+      {title:"Unexpected KYC or identity threat",explain:"Contact the bank or organisation through its official app/site, not by using a link in the message.",test: t => /\b(?:kyc.{0,25}(?:update|expire|block|verify)|aadhaar.{0,25}(?:block|expire|suspend)|pan card.{0,25}(?:block|expire)|bank.{0,25}(?:account blocked|suspend|kyc pending))\b/i.test(t)}
+    ];
+    const renderChecks = (text) => {
+      const matches = patterns.filter(p => p.test(text));
+      checkResult.replaceChildren();
+      checkResult.hidden = false;
+      const head = document.createElement("div");
+      head.className = "checker-result-head " + (matches.length >= 3 ? "risk-high" : matches.length > 0 ? "risk-medium" : "risk-low");
+      const h = document.createElement("h3");
+      h.textContent = matches.length >= 3 ? "Several warning signs found" : matches.length > 0 ? "Some warning signs found" : "No common warning patterns detected";
+      const p = document.createElement("p");
+      p.textContent = matches.length >= 3 ? "Pause. Do not click links, send money or share information until you independently verify the request." : matches.length > 0 ? "Treat this message cautiously and verify it through a separate, official channel." : "This is not a safety certificate. Scams may use wording this checklist does not recognise.";
+      head.append(h,p);
+      checkResult.appendChild(head);
+      if (matches.length) {
+        const list = document.createElement("div"); list.className = "checker-flag-list";
+        matches.forEach(match => {
+          const row = document.createElement("div"); row.className = "checker-flag";
+          const icon = document.createElement("span"); icon.className = "flag-mark"; icon.textContent = "!";
+          const body = document.createElement("div");
+          const title = document.createElement("b"); title.textContent = match.title;
+          const desc = document.createElement("p"); desc.textContent = match.explain;
+          body.append(title, desc); row.append(icon, body); list.appendChild(row);
+        });
+        checkResult.appendChild(list);
+      } else {
+        const note = document.createElement("p"); note.className = "checker-no-match";
+        note.textContent = "Still verify the sender and destination independently. A legitimate-looking message can be fraudulent, and a dangerous message can avoid these patterns.";
+        checkResult.appendChild(note);
+      }
+      const tail = document.createElement("p"); tail.className = "small-note";
+      tail.textContent = "Local pattern check only. The message is not sent to a server by this feature.";
+      checkResult.appendChild(tail);
+    };
+    checkButton.addEventListener("click", () => {
+      const text = messageInput.value.trim();
+      checkResult.hidden = true; checkResult.replaceChildren();
+      if (!text) {
+        const p = document.createElement("p"); p.className = "checker-validation"; p.textContent = "Paste a message with all personal and secret information removed, then check it.";
+        checkResult.appendChild(p); checkResult.hidden = false; return;
+      }
+      renderChecks(text);
+    });
+    clearButton?.addEventListener("click", () => {
+      messageInput.value = ""; checkResult.replaceChildren(); checkResult.hidden = true; messageInput.focus();
+    });
+  }
+
 })();
