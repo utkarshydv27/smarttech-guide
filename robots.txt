@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://utkarshydv27.github.io/smarttech-guide/sitemap.xml
